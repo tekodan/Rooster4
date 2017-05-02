@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Gana-Pae Chat V 2.0</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_jid">ID</string>
+    <string name="prompt_password">Password </string>
+    <string name="action_sign_in">Sign in </string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_jid">ID Invalido</string>
+    <string name="error_invalid_password">Password Muy Corto</string>
+    <string name="error_incorrect_password">Password Incorrecto</string>
+    <string name="error_field_required">Campo Requerido</string>
+    <string name="permission_rationale">"Se necesita autorizacion."
+    </string>
+</resources>
