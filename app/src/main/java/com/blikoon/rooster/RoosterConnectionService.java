@@ -13,6 +13,9 @@ import org.jivesoftware.smack.XMPPException;
 
 import java.io.IOException;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
+
 /**
  * Created by gakwaya on 4/28/2016.
  */
@@ -38,6 +41,7 @@ public class RoosterConnectionService extends Service {
     public RoosterConnectionService() {
 
     }
+
     public static RoosterConnection.ConnectionState getState()
     {
         if (sConnectionState == null)
@@ -148,5 +152,15 @@ public class RoosterConnectionService extends Service {
         Log.d(TAG,"onDestroy()");
         super.onDestroy();
         stop();
+    }
+
+
+
+    public class TrustAllHostNameVerifier implements HostnameVerifier {
+
+        public boolean verify(String hostname, SSLSession session) {
+            return true;
+        }
+
     }
 }

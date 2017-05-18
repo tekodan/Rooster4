@@ -10,8 +10,10 @@ import android.util.Log;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.ChatMessageListener;
+import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.ReconnectionManager;
+import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -77,18 +79,79 @@ public class RoosterConnection implements ConnectionListener,ChatMessageListener
         builder.setUsernameAndPassword(mUsername, mPassword);
         builder.setRosterLoadedAtLogin(true);
         builder.setResource("Rooster");
+        builder.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
+        builder.setPort(5222);
+        builder.setSendPresence(true);
+        builder.setDebuggerEnabled(true);
+        SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
+        SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
+        SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
+
+
+
 
         //Set up the ui thread broadcast message receiver.
         setupUiThreadBroadCastMessageReceiver();
 
         mConnection = new XMPPTCPConnection(builder.build());
         mConnection.addConnectionListener(this);
-        mConnection.connect();
-        mConnection.login();
+        try {
+
+
+            mConnection.connect();
+
+        } catch (SmackException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XMPPException e) {
+            e.printStackTrace();
+        }
+        // Log into the server
+
+        try {
+            mConnection.login();
+        } catch (XMPPException e) {
+            e.printStackTrace();
+        } catch (SmackException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
 
         ReconnectionManager reconnectionManager = ReconnectionManager.getInstanceFor(mConnection);
         reconnectionManager.setEnabledPerDefault(true);
         reconnectionManager.enableAutomaticReconnection();
+
+
+
+        /*
+        SmackConfiguration.DEBUG = true;
+    XMPPTCPConnectionConfiguration.Builder configBuilder = XMPPTCPConnectionConfiguration.builder();
+    configBuilder.setUsernameAndPassword("test", "test");
+    configBuilder.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
+    configBuilder.setResource("test");
+    configBuilder.setServiceName("enter your server ip here");
+    configBuilder.setHost("eneter your server ip here");
+    configBuilder.setPort(5222);
+    configBuilder.setSendPresence(true);
+    configBuilder.setDebuggerEnabled(true);
+    SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
+    SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
+    SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
+
+    XMPPTCPConnection connection;
+    connection = new XMPPTCPConnection(configBuilder.build());
+    // Connect to the server
+
+
+
+
+        */
+
 
     }
 
